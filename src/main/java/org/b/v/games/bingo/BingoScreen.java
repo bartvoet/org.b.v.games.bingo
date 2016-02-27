@@ -18,10 +18,13 @@ public class BingoScreen extends JFrame {
 	private static final String NEXT_LABEL = "volgende";
 	private static final String RESTART_LABEL = "nieuw spel";
 	
-	private static final int DEFAULT_GRID_ROWS = 9;
-	private static final int DEFAULT_GRID_COLS = 10;
+//	private static final int DEFAULT_GRID_ROWS = 9;
+//	private static final int DEFAULT_GRID_COLS = 10;
 	
-	private static final int SIZE_OF_TOP_LABEL = 160;
+	private static final int DEFAULT_GRID_ROWS = 4;
+	private static final int DEFAULT_GRID_COLS = 3;
+	
+	private static final int SIZE_OF_TOP_LABEL = 400;
 	private static final int SIZE_OF_GRID_LABEL = 20;
 
 	private JButton nextButton;
@@ -46,7 +49,8 @@ public class BingoScreen extends JFrame {
 		topLabel = new JLabel(INITIAL_TOP_LABEL,SwingConstants.CENTER);
 		
 		game = new BingoGame(rows * cols);
-		grid = new GridPanel(rows,cols,SIZE_OF_GRID_LABEL);
+		//grid = GridPanel.fromLeftToRight(rows,cols,SIZE_OF_GRID_LABEL);
+		grid = GridPanel.fromTopToBottom(cols,rows,SIZE_OF_GRID_LABEL);
 	}
 
 	private void configureSomeActions() {
@@ -76,7 +80,6 @@ public class BingoScreen extends JFrame {
 		
 		this.add(topLabel,BorderLayout.PAGE_START);
 		this.add(grid,BorderLayout.CENTER);
-		
 		
 		JPanel panel = new JPanel();
 		panel.add(nextButton);
