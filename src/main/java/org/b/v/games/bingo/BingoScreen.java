@@ -18,11 +18,8 @@ public class BingoScreen extends JFrame {
 	private static final String NEXT_LABEL = "volgende";
 	private static final String RESTART_LABEL = "nieuw spel";
 	
-//	private static final int DEFAULT_GRID_ROWS = 9;
-//	private static final int DEFAULT_GRID_COLS = 10;
-	
-	private static final int DEFAULT_GRID_ROWS = 4;
-	private static final int DEFAULT_GRID_COLS = 3;
+	private static final int DEFAULT_GRID_ROWS = 9;
+	private static final int DEFAULT_GRID_COLS = 10;
 	
 	private static final int SIZE_OF_TOP_LABEL = 400;
 	private static final int SIZE_OF_GRID_LABEL = 20;
