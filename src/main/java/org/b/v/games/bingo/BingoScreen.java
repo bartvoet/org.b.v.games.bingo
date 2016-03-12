@@ -6,20 +6,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-public class BingoScreen extends JFrame {
+public class BingoScreen extends JPanel {
 	private static final long serialVersionUID = 3640685537306132479L;
 
 	private static final String INITIAL_TOP_LABEL = "?";
 	private static final String NEXT_LABEL = "volgende";
 	private static final String RESTART_LABEL = "nieuw spel";
-	
-	private static final int DEFAULT_GRID_ROWS = 9;
-	private static final int DEFAULT_GRID_COLS = 10;
 	
 	private static final int SIZE_OF_TOP_LABEL = 400;
 	private static final int SIZE_OF_GRID_LABEL = 20;
@@ -36,9 +32,6 @@ public class BingoScreen extends JFrame {
 		configureSomeActions();
 		doScreenSettings();
 		doSomeLayout();
-
-		pack();
-        setVisible(true);
 	}
 
 	private void initializeTheComponents(int rows, int cols) {
@@ -71,8 +64,6 @@ public class BingoScreen extends JFrame {
 	
 	private void doScreenSettings() {
 		setLayout(new BorderLayout());
-		this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
 	private void doSomeLayout() {
@@ -101,14 +92,5 @@ public class BingoScreen extends JFrame {
 		topLabel.setText(Integer.toString((i+1)));
 		grid.markANewNumberOnTheScreen(i);
 	}
-	
-    public static void main(String[] args) {
-		if(args.length < 2) {
-			new BingoScreen(DEFAULT_GRID_ROWS,DEFAULT_GRID_COLS);
-		}else {
-			int rows = Integer.parseInt(args[0]);
-			int cols = Integer.parseInt(args[1]);
-			new BingoScreen(rows,cols);
-		}
-	}
+
 }
