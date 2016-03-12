@@ -10,7 +10,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-public class BingoScreen extends JPanel {
+public class BingoPanel extends JPanel {
 	private static final long serialVersionUID = 3640685537306132479L;
 
 	private static final String INITIAL_TOP_LABEL = "?";
@@ -27,7 +27,7 @@ public class BingoScreen extends JPanel {
 	private GridPanel grid;
 	private BingoGame game;
 	
-	public BingoScreen(int rows,int cols) {
+	public BingoPanel(int rows,int cols) {
 		initializeTheComponents(rows, cols);
 		configureSomeActions();
 		doScreenSettings();

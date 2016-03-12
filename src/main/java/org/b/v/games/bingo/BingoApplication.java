@@ -17,15 +17,15 @@ public class BingoApplication {
 
 	private static JFrame mainScreen;
 	private static JFrame secondScreen;
-	private static BingoScreen bingoPanel;
+	private static BingoPanel bingoPanel;
 	
-	private static BingoScreen contentPane(String[] args) {
+	private static BingoPanel contentPane(String[] args) {
 		if(args.length < 2) {
-			return new BingoScreen(DEFAULT_GRID_ROWS,DEFAULT_GRID_COLS);
+			return new BingoPanel(DEFAULT_GRID_ROWS,DEFAULT_GRID_COLS);
 		}else {
 			int rows = Integer.parseInt(args[0]);
 			int cols = Integer.parseInt(args[1]);
-			return new BingoScreen(rows,cols);
+			return new BingoPanel(rows,cols);
 		}
 	}
 	
@@ -38,7 +38,7 @@ public class BingoApplication {
 			public void actionPerformed(ActionEvent e) {
 				if(secondScreen==null) {
 					secondScreen = new JFrame();
-					secondScreen.setContentPane(new BingoScreen(DEFAULT_GRID_ROWS,DEFAULT_GRID_COLS));
+					secondScreen.setContentPane(new BingoPanel(DEFAULT_GRID_ROWS,DEFAULT_GRID_COLS));
 					secondScreen.setSize(new Dimension(600,300));
 				}
 				secondScreen.setVisible(true);
