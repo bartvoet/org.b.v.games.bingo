@@ -34,6 +34,7 @@ public class BingoScreen extends JFrame {
 	public BingoScreen(int rows,int cols) {
 		initializeTheComponents(rows, cols);
 		configureSomeActions();
+		doScreenSettings();
 		doSomeLayout();
 
 		pack();
@@ -67,12 +68,14 @@ public class BingoScreen extends JFrame {
 			}
 		});
 	}
-
-	private void doSomeLayout() {
+	
+	private void doScreenSettings() {
 		setLayout(new BorderLayout());
 		this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
+	}
+
+	private void doSomeLayout() {
 		setLabelSize(topLabel,SIZE_OF_TOP_LABEL);
 		
 		this.add(topLabel,BorderLayout.PAGE_START);
