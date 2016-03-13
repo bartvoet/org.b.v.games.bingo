@@ -53,7 +53,8 @@ public class BingoApplication {
 			public void actionPerformed(ActionEvent e) {
 				if(secondScreen==null) {
 					secondScreen = new JFrame();
-					secondScreen.setContentPane(new BingoPanel(DEFAULT_GRID_ROWS,DEFAULT_GRID_COLS));
+					secondPanel = mainPanel.copy();
+					secondScreen.setContentPane(secondPanel);
 					secondScreen.setSize(new Dimension(600,300));
 				}
 				secondScreen.setVisible(true);
@@ -70,10 +71,12 @@ public class BingoApplication {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(!game.isEverythingsAlreadySelected()) {
-					mainPanel.markTheSelectedNumberOnTheScreen(game.guessSelection());
+					int selection = game.guessSelection();
+					mainPanel.markTheSelectedNumberOnTheScreen(selection);
+					if(secondPanel!=null) {
+						secondPanel.markTheSelectedNumberOnTheScreen(selection);
+					}
 				}
-				
-				//mainPanel.makeAGuess();
 			}
 		});
 		
@@ -82,6 +85,9 @@ public class BingoApplication {
 			public void actionPerformed(ActionEvent e) {
 				game.clean();
 				mainPanel.clean();
+				if(secondPanel!=null) {
+					secondPanel.clean();
+				}
 			}
 		});
 	}
@@ -98,8 +104,6 @@ public class BingoApplication {
 		mainPanel = contentPane(args);
 		mainScreenPanel.add(mainPanel,BorderLayout.CENTER);
 		
-
-		
 		nextButton = new JButton(NEXT_LABEL);
 		restartButton = new JButton(RESTART_LABEL);
 		configureSomeActions();
@@ -108,8 +112,6 @@ public class BingoApplication {
 		panel.add(nextButton);
 		panel.add(restartButton);
 		mainScreenPanel.add(panel,BorderLayout.PAGE_END);
-		
-		secondPanel = contentPane(args);
 		
 		mainScreen.setContentPane(mainScreenPanel);
 		mainScreen.setExtendedState(mainScreen.getExtendedState() | JFrame.MAXIMIZED_BOTH);

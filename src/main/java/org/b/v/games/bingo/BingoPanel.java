@@ -18,8 +18,16 @@ public class BingoPanel extends JPanel {
 	private JLabel topLabel;
 
 	private GridPanel grid;
+
+	private int cols;
+
+	private int rows;
+	
+	private BingoPanel() {}
 	
 	public BingoPanel(int rows,int cols) {
+		this.rows=rows;
+		this.cols=cols;
 		initializeTheComponents(rows, cols);
 		doSomeLayout();
 	}
@@ -49,5 +57,15 @@ public class BingoPanel extends JPanel {
 
 	private void setLabelSize(JLabel label,int size) {
 		label.setFont(new Font(label.getFont().getName(), label.getFont().getStyle(), size));
+	}
+
+	public BingoPanel copy() {
+		BingoPanel copy = new BingoPanel();
+		copy.rows=rows;
+		copy.cols=cols;
+		copy.grid = grid.copy();
+		copy.topLabel=new JLabel(topLabel.getText(),SwingConstants.CENTER);
+		copy.doSomeLayout();
+		return copy;
 	}
 }

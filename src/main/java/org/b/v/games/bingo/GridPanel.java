@@ -20,13 +20,24 @@ public class GridPanel extends JPanel
 	private int lastSelected = -1;
 	
 	private PositionManager positionManager;
+
+	private int sizeOfLabels;
+
+	private int rows;
+
+	private int cols;
 	
 	private interface PositionManager {
 		int getActualPosition(int pos);
 	}
 	
-	private GridPanel(int size,int sizeOfLabels) {
-        this.size=size;
+	private GridPanel(){}
+	
+	private GridPanel(int rows,int cols,int sizeOfLabels) {
+        this.size=rows * cols;
+        this.rows=rows;
+        this.cols=cols;
+        this.sizeOfLabels=sizeOfLabels;
 		gridLabels = new JLabel[size];
 
         for (int i = 0; i < size; ++i) {
@@ -37,7 +48,7 @@ public class GridPanel extends JPanel
 	}
 	
 	public static GridPanel fromLeftToRight(int rows,int cols,int sizeOfLabels) {
-		GridPanel panel = new GridPanel(rows * cols,sizeOfLabels);
+		GridPanel panel = new GridPanel(rows , cols,sizeOfLabels);
 		panel.setLayout(new GridLayout(rows,cols));
         panel.positionManager = new PositionManager() {
 			@Override
@@ -50,7 +61,7 @@ public class GridPanel extends JPanel
 	
 
 	public static GridPanel fromTopToBottom(final int rows,final int cols,int sizeOfLabels) {
-		GridPanel panel = new GridPanel(rows*cols,sizeOfLabels);
+		GridPanel panel = new GridPanel(rows,cols,sizeOfLabels);
 		panel.setLayout(new GridLayout(rows,cols));
         
         panel.positionManager = new PositionManager() {
@@ -86,5 +97,30 @@ public class GridPanel extends JPanel
         	gridLabels[i].setBorder(new EmptyBorder(0,0,0,0));
         }
 		
+	}
+
+	public GridPanel copy() {
+		GridPanel copy = new GridPanel();
+		copy.size=rows * cols;
+		copy.rows=rows;
+		copy.cols=cols;
+		copy.sizeOfLabels=sizeOfLabels;
+		copy.gridLabels = new JLabel[size];
+
+		copy.setLayout(new GridLayout(rows,cols));
+		copy.positionManager = new PositionManager() {
+			@Override
+			public int getActualPosition(int pos) {
+				return(((pos % rows) * cols) + (pos / rows));
+			}
+		};
+		
+        for (int i = 0; i < size; ++i) {
+        	copy.gridLabels[i] = new JLabel(this.gridLabels[i].getText(),SwingConstants.CENTER);
+        	copy.setLabelSize(copy.gridLabels[i],sizeOfLabels);
+        	copy.add(copy.gridLabels[i]);
+        }
+		
+		return copy;
 	}
 }
