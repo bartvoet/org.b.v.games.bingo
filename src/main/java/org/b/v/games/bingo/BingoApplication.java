@@ -30,14 +30,16 @@ public class BingoApplication {
 	private static JButton restartButton = new JButton(RESTART_LABEL);
 	
 	
-	private BingoGame game;//TODO let the app interact with screen and play master (rather that frame)
+	private static BingoGame game;
 	
 	private static BingoPanel contentPane(String[] args) {
 		if(args.length < 2) {
+			game=new BingoGame(DEFAULT_GRID_ROWS*DEFAULT_GRID_COLS);
 			return new BingoPanel(DEFAULT_GRID_ROWS,DEFAULT_GRID_COLS);
 		}else {
 			int rows = Integer.parseInt(args[0]);
 			int cols = Integer.parseInt(args[1]);
+			game=new BingoGame(rows*cols);
 			return new BingoPanel(rows,cols);
 		}
 	}
@@ -67,13 +69,18 @@ public class BingoApplication {
 		nextButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				mainPanel.makeAGuess();
+				if(!game.isEverythingsAlreadySelected()) {
+					mainPanel.markTheSelectedNumberOnTheScreen(game.guessSelection());
+				}
+				
+				//mainPanel.makeAGuess();
 			}
 		});
 		
 		restartButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				game.clean();
 				mainPanel.clean();
 			}
 		});
@@ -91,6 +98,7 @@ public class BingoApplication {
 		mainPanel = contentPane(args);
 		mainScreenPanel.add(mainPanel,BorderLayout.CENTER);
 		
+
 		
 		nextButton = new JButton(NEXT_LABEL);
 		restartButton = new JButton(RESTART_LABEL);
