@@ -18,21 +18,23 @@ public class BingoApplication {
 	private static final int DEFAULT_GRID_ROWS = 9;
 	private static final int DEFAULT_GRID_COLS = 10;
 
-	private static JFrame mainScreen;
-	private static BingoPanel mainPanel;
-	private static JFrame secondScreen;
-	private static BingoPanel secondPanel;
-	
 	private static final String NEXT_LABEL = "volgende";
 	private static final String RESTART_LABEL = "nieuw spel";
+
+	private BingoGame game;
+
+	private JFrame mainScreen;
+	private BingoPanel mainPanel;
+	private JPanel mainScreenPanel; 
 	
-	private static JButton nextButton = new JButton(NEXT_LABEL);
-	private static JButton restartButton = new JButton(RESTART_LABEL);
+	private JFrame secondScreen;
+	private BingoPanel secondPanel;
 	
+	private JMenuBar menuBar;
+	private JButton nextButton = new JButton(NEXT_LABEL);
+	private JButton restartButton = new JButton(RESTART_LABEL);
 	
-	private static BingoGame game;
-	
-	private static BingoPanel contentPane(String[] args) {
+	private BingoPanel contentPane(String[] args) {
 		if(args.length < 2) {
 			game=new BingoGame(DEFAULT_GRID_ROWS*DEFAULT_GRID_COLS);
 			return new BingoPanel(DEFAULT_GRID_ROWS,DEFAULT_GRID_COLS);
@@ -44,7 +46,10 @@ public class BingoApplication {
 		}
 	}
 	
-	private static void initializeTheAdminstrationMenu(JMenuBar menuBar) {
+	private void createAndConfigureTheAdminstrationMenu() {
+		menuBar = new JMenuBar();
+		mainScreen.setJMenuBar(menuBar);
+		
 		JMenu menu = new JMenu("Extra");
         menu.setMnemonic(KeyEvent.VK_E);
  
@@ -52,10 +57,7 @@ public class BingoApplication {
         extraFeatures.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(secondScreen==null) {
-					secondScreen = new JFrame();
-					secondPanel = mainPanel.copy();
-					secondScreen.setContentPane(secondPanel);
-					secondScreen.setSize(new Dimension(600,300));
+					createAndConfigureSecondaryScreen();
 				}
 				secondScreen.setVisible(true);
 			}
@@ -66,44 +68,69 @@ public class BingoApplication {
         menuBar.add(menu);
 	}
 	
-	private static void configureSomeActions() {
+	private void createAndConfigureSecondaryScreen() {
+		secondScreen = new JFrame();
+		secondPanel = mainPanel.copy();
+		secondScreen.setContentPane(secondPanel);
+		secondScreen.setSize(new Dimension(600,300));
+	}
+	
+	private void configureSomeActions() {
 		nextButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(!game.isEverythingsAlreadySelected()) {
-					int selection = game.guessSelection();
-					mainPanel.markTheSelectedNumberOnTheScreen(selection);
-					if(secondPanel!=null) {
-						secondPanel.markTheSelectedNumberOnTheScreen(selection);
-					}
-				}
+				selectNextNumber();
 			}
 		});
 		
 		restartButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				game.clean();
-				mainPanel.clean();
-				if(secondPanel!=null) {
-					secondPanel.clean();
-				}
+				cleanupBothScreens();
 			}
 		});
 	}
 	
-	public static void main(String[] args) {
+	private void cleanupBothScreens() {
+		game.clean();
+		mainPanel.clean();
+		if(secondPanel!=null) {
+			secondPanel.clean();
+		}
+	}
+	
+	private void selectNextNumber() {
+		if(!game.isEverythingsAlreadySelected()) {
+			int selection = game.guessSelection();
+			mainPanel.markTheSelectedNumberOnTheScreen(selection);
+			if(secondPanel!=null) {
+				secondPanel.markTheSelectedNumberOnTheScreen(selection);
+			}
+		}
+	}
+	
+	private void launch(String[] args) {
 		mainScreen = new JFrame();
+		createAndConfigureTheAdminstrationMenu();
+		createAndConfigureMainScreenPanel(args);
+		createAndConfigureActionButtons();
 		
-		JMenuBar menuBar = new JMenuBar();
-		mainScreen.setJMenuBar(menuBar);
-		initializeTheAdminstrationMenu(menuBar);
+		mainScreen.setExtendedState(mainScreen.getExtendedState() | JFrame.MAXIMIZED_BOTH);
+		mainScreen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		mainScreen.pack();
+		mainScreen.setVisible(true);
 		
-		JPanel mainScreenPanel = new JPanel();
+	}
+
+	private void createAndConfigureMainScreenPanel(String[] args) {
+		mainScreenPanel = new JPanel();
 		mainScreenPanel.setLayout(new BorderLayout());
 		mainPanel = contentPane(args);
 		mainScreenPanel.add(mainPanel,BorderLayout.CENTER);
-		
+		mainScreen.setContentPane(mainScreenPanel);
+	}
+
+	private void createAndConfigureActionButtons() {
 		nextButton = new JButton(NEXT_LABEL);
 		restartButton = new JButton(RESTART_LABEL);
 		configureSomeActions();
@@ -112,11 +139,9 @@ public class BingoApplication {
 		panel.add(nextButton);
 		panel.add(restartButton);
 		mainScreenPanel.add(panel,BorderLayout.PAGE_END);
-		
-		mainScreen.setContentPane(mainScreenPanel);
-		mainScreen.setExtendedState(mainScreen.getExtendedState() | JFrame.MAXIMIZED_BOTH);
-		mainScreen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		mainScreen.pack();
-		mainScreen.setVisible(true);
+	}
+	
+	public static void main(String[] args) {
+		new BingoApplication().launch(args);
 	}
 }
